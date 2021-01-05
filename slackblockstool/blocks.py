@@ -496,6 +496,16 @@ class BlockFile(Block):
         self.external_id = external_id
         self.source = source
 
+class BlockHeader(Block):
+    def __init__(self, text: ObjectPlainText, block_id: str = None):
+        super().__init__("file", block_id)
+        self.text = text
+
+    def getDict(self):
+        payload = super().getDict()
+        payload['text' = self.text.getDict()]
+        return payload
+
 
 """
 Block types
