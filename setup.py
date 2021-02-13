@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="slackblockstool", # Replace with your own username
-    version="0.0.2",
+    version="0.0.7",
     author="shinsuke masuda",
     author_email="shinsuke.masuda@gmail.com",
     description="Tool for Slack Blocks",

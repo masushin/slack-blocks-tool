@@ -1,4 +1,5 @@
 from typing import List
+from typing import Union
 import json
 
 """
@@ -53,14 +54,14 @@ class ObjectMrkdwnText(ObjectText):
 
 
 class ObjectConfirmationDialog(Object):
-    def __init__(self, title: ObjectPlainText, text: ObjectPlainText,
-                 confirm: ObjectPlainText, deny: ObjectPlainText):
+    def __init__(self, title: ObjectPlainText, text: Union[ObjectPlainText,str],
+                 confirm: Union[ObjectPlainText,str], deny: Union[ObjectPlainText,str]):
         super().__init__()
         self.type = "_object_confirmation_dialog"
         self.title = title
-        self.text = text
-        self.confirm = confirm
-        self.deny = deny
+        self.text = ObjectPlainText(text) if type(text) is str else text
+        self.confirm = ObjectPlainText(confirm) if type(confirm) is str else confirm
+        self.deny = ObjectPlainText(deny) if type(deny) is str else deny
 
     def getDict(self):
         payload = super().getDict()
@@ -72,13 +73,13 @@ class ObjectConfirmationDialog(Object):
 
 
 class ObjectOption(Object):
-    def __init__(self, text: ObjectPlainText, value: str,
-                 description: ObjectPlainText = None, url: str = None):
+    def __init__(self, text: Union[ObjectPlainText,str], value: str,
+                 description: Union[ObjectPlainText,str] = None, url: str = None):
         super().__init__()
         self.type = "_object_option"
-        self.text = text
+        self.text = ObjectPlainText(text) if type(text) is str else text
         self.value = value
-        self.description = description
+        self.description = ObjectPlainText(description) if type(description) is str else description
         self.url = url
 
     def getDict(self):
@@ -93,10 +94,10 @@ class ObjectOption(Object):
 
 
 class ObjectOptionGroup(Object):
-    def __init__(self, label: ObjectPlainText, options: List[ObjectOption]):
+    def __init__(self, label: Union[ObjectPlainText,str], options: List[ObjectOption]):
         super().__init__()
         self.type = "_object_option_group"
-        self.label = label
+        self.label = ObjectPlainText(label) if type(label) is str else label
         self.options = options
 
     def getDict(self):
@@ -124,11 +125,11 @@ class Element:
 
 
 class ElementButton(Element):
-    def __init__(self, text: ObjectText, action_id: str, url: str = None,
+    def __init__(self, text: Union[ObjectText,str], action_id: str, url: str = None,
                  value: str = None, style: str = None,
                  confirm: ObjectConfirmationDialog = None):
         super().__init__("button")
-        self.text = text
+        self.text = ObjectPlainText(text) if type(text) is str else text
         self.action_id = action_id
         self.url = url
         self.value = value
@@ -177,12 +178,12 @@ class ElementCheckbox(Element):
 
 
 class ElementDatepicker(Element):
-    def __init__(self, action_id: str, placeholder: ObjectText = None,
+    def __init__(self, action_id: str, placeholder: Union[ObjectText,str] = None,
                  initial_date: str = None,
                  confirm: ObjectConfirmationDialog = None):
         super().__init__("datepicker")
         self.action_id = action_id
-        self.placeholder = placeholder
+        self.placeholder = ObjectPlainText(placeholder) if type(placeholder) is str else placeholder
         self.initial_date = initial_date
         self.confirm = confirm
 
@@ -272,12 +273,12 @@ class ElementOverflow(Element):
 
 
 class ElementPlainTextInput(Element):
-    def __init__(self, action_id: str, placeholder: ObjectText = None,
+    def __init__(self, action_id: str, placeholder: Union[ObjectText,str] = None,
                  initial_value: str = None, multiline: bool = False,
                  min_length: int = None, max_length: int = None):
         super().__init__("plain_text_input")
         self.action_id = action_id
-        self.placeholder = placeholder
+        self.placeholder =  ObjectPlainText(placeholder) if type(placeholder) is str else placeholder
         self.initial_value = initial_value
         self.multiline = multiline
         self.min_length = min_length
@@ -309,13 +310,13 @@ class ElementRadioButton(Element):
 
 
 class ElementSelectWithStatic(Element):
-    def __init__(self, placeholder: ObjectText, action_id: str,
+    def __init__(self, placeholder: Union[ObjectText,str], action_id: str,
                  options: List[ObjectOption],
                  option_groups: List[ObjectOptionGroup] = None,
                  initial_option: ObjectOption = None,
                  confirm: ObjectConfirmationDialog = None):
         super().__init__("static_select")
-        self.placeholder = placeholder
+        self.placeholder = ObjectPlainText(placeholder) if type(placeholder) is str else placeholder
         self.action_id = action_id
         self.options = options
         self.option_groups = option_groups
@@ -398,10 +399,10 @@ class Block:
 
 
 class BlockSection(Block):
-    def __init__(self, text: ObjectText, block_id: str = None,
+    def __init__(self, text: Union[ObjectText, str], block_id: str = None,
                  fields: List[ObjectText] = None, accessory: Element = None):
         super().__init__("section", block_id)
-        self.text = text
+        self.text = ObjectPlainText(text) if type(text) is str else text
         self.fields = fields
         self.accessory = accessory
 
@@ -428,11 +429,11 @@ class BlockDivider(Block):
 
 class BlockImage(Block):
     def __init__(self, image_url: str, alt_text: str,
-                 title: ObjectText = None, block_id: str = None):
+                 title: Union[ObjectText,str] = None, block_id: str = None):
         super().__init__("image", block_id)
         self.image_url = image_url
         self.alt_text = alt_text
-        self.title = title
+        self.title = ObjectPlainText(title) if type(title) is str else title
 
     def getDict(self):
         payload = super().getDict()
@@ -471,13 +472,13 @@ class BlockContext(Block):
 
 
 class BlockInput(Block):
-    def __init__(self, label: ObjectText, element: Element,
-                 block_id: str = None, hint: ObjectText = None,
+    def __init__(self, label: Union[ObjectText, str], element: Element,
+                 block_id: str = None, hint: Union[ObjectText,str] = None,
                  optional: bool = False):
         super().__init__("input", block_id)
-        self.label = label
+        self.label = ObjectPlainText(label) if type(label) is str else label
         self.element = element
-        self.hint = hint
+        self.hint = ObjectPlainText(hint) if type(hint) is str else hint
         self.optional = optional
 
     def getDict(self):
@@ -497,13 +498,13 @@ class BlockFile(Block):
         self.source = source
 
 class BlockHeader(Block):
-    def __init__(self, text: ObjectPlainText, block_id: str = None):
-        super().__init__("file", block_id)
-        self.text = text
+    def __init__(self, text: Union[ObjectPlainText,str], block_id: str = None):
+        super().__init__("header", block_id)
+        self.text =  ObjectPlainText(text) if type(text) is str else text
 
     def getDict(self):
         payload = super().getDict()
-        payload['text' = self.text.getDict()]
+        payload['text'] = self.text.getDict()
         return payload
 
 
@@ -521,6 +522,9 @@ class SlackBlocks:
     def addBlocks(self, blocks: List[Block]):
         for block in blocks:
             self.blocks.append(block)
+
+    def clearBlocks(self):
+        self.blocks = []
 
     def getDict(self):
         if self.type is not None:
@@ -541,15 +545,15 @@ class Message(SlackBlocks):
 
 
 class Modal(SlackBlocks):
-    def __init__(self, title: ObjectText, callback_id: str = None,
-                 submit: ObjectText = None, close: ObjectText = None,
+    def __init__(self, title: Union[ObjectText,str], callback_id: str = None,
+                 submit: Union[ObjectText,str] = None, close: Union[ObjectText,str] = None,
                  private_metadata: dict = {}, clear_on_close: bool = False,
                  notify_on_close: bool = False, external_id: str = None):
         super().__init__("modal")
-        self.title = title
+        self.title = ObjectPlainText(title) if type(title) is str else title
         self.callback_id = callback_id
-        self.submit = submit
-        self.close = close
+        self.submit = ObjectPlainText(submit) if type(submit) is str else submit
+        self.close = ObjectPlainText(close) if type(close) is str else close
         self.private_metadata = private_metadata
         self.clear_on_close = clear_on_close
         self.notify_on_close = notify_on_close
