@@ -1,15 +1,18 @@
 import json
 import base64
 import datetime
-from simple_aes_cipher import generate_secret_key, AESCipher
 import zlib
 import logging
 
 class MetaDataParser:
-    def __init__(self, key:str):
+    def __init__(self, key:str=""):
+        '''
         self.key = generate_secret_key(key)
         self.cipher = AESCipher(key=self.key)
+        '''
+        self.key = key
 
+    '''
     def cencode(self, d:dict) -> str:
         compressed = zlib.compress(json.dumps(d).encode())
         base64_encoded = base64.b64encode(compressed)
@@ -24,6 +27,7 @@ class MetaDataParser:
         base64_decoded = base64.b64decode(decrypted)
         uncompressed = zlib.decompress(base64_decoded)
         return json.loads(uncompressed.decode())
+    '''
 
     @staticmethod
     def encode(d: dict) -> str:
