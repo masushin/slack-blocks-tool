@@ -1,4 +1,8 @@
 slackblockstool.egg-info/
 dist/
 build/
+3.9.9/
+.python-version
 
+poetry.lock
+pyproject.toml
