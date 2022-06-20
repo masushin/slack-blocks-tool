@@ -6,3 +6,4 @@ build/
 
 poetry.lock
 pyproject.toml
+.DS_Store
