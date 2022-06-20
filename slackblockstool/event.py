@@ -63,6 +63,11 @@ class SlackEventHandler:
             self.funclist.addFunc(SlackEventFunc("slach_command", id, func))
         return _event
 
+    def event_event_callback(self, id):
+        def _event(func):
+            self.funclist.addFunc(SlackEventFunc("event_callback", id, func))
+        return _event
+
     
 
     def handler(self, param: dict):
@@ -98,6 +103,14 @@ class SlackEventHandler:
                     )
                     if func is not None:
                         return func(payload=param, client=self.client, action_id=action['action_id'])
+            elif type == 'event_callback':
+                func = self.funclist.getFunc( type, param['event']['type'])
+                if func == None:
+                    logging.warning("Undefined Event Typet (event callbak): {}".format(param))
+                    return None
+                return func(payload=param, client=self.client)
+
+
         elif "command" in param:
             type = "slach_command"
             func = self.funclist.getFunc(type, param['command'])

@@ -5,17 +5,20 @@ import zlib
 import logging
 
 class MetaDataParser:
-    def __init__(self, key:str):
+    def __init__(self, key:str=""):
+        '''
+        self.key = generate_secret_key(key)
+        self.cipher = AESCipher(key=self.key)
+        '''
         self.key = key
 
+    '''
     def cencode(self, d:dict) -> str:
         compressed = zlib.compress(json.dumps(d).encode())
         base64_encoded = base64.b64encode(compressed)
-        '''
         logging.info("b:{}".format(base64_encoded))
         encrypted = self.cipher.encrypt(base64_encoded.decode())
         logging.info("e:{}".format(encrypted))
-        '''
         return base64_encoded
 
     def cdecode(self, s:str) -> dict:
@@ -23,6 +26,7 @@ class MetaDataParser:
         base64_decoded = base64.b64decode(s)
         uncompressed = zlib.decompress(base64_decoded)
         return json.loads(uncompressed.decode())
+    '''
 
     @staticmethod
     def encode(d: dict) -> str:
