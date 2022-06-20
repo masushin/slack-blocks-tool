@@ -19,11 +19,12 @@ class MetaDataParser:
         logging.info("b:{}".format(base64_encoded))
         encrypted = self.cipher.encrypt(base64_encoded.decode())
         logging.info("e:{}".format(encrypted))
-        return base64_encoded
+        return encrypted
 
     def cdecode(self, s:str) -> dict:
         logging.info("d:{}".format(s))        
-        base64_decoded = base64.b64decode(s)
+        decrypted = self.cipher.decrypt(s)
+        base64_decoded = base64.b64decode(decrypted)
         uncompressed = zlib.decompress(base64_decoded)
         return json.loads(uncompressed.decode())
     '''
