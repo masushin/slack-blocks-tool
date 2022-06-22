@@ -582,14 +582,43 @@ class ElementSelectWithExternalData(Element):
 
 
 class ElementSelectWithUserList(Element):
-    """
-    not implemented
-    """
+    TYPE="users_select"
 
-    def __init__(self):
-        super().__init__("")
+    def __init__(
+        self,
+        action_id: str,
+        placeholder: Union[ObjectText, str] = None,
+        initial_user: str = None,
+        confirm: ObjectConfirmationDialog = None,
+        focus_on_load: bool = False
+    ):
+        super().__init__(self.TYPE)
+        self.action_id = action_id
+        self.placeholder = (
+            ObjectPlainText(placeholder) if type(placeholder) is str else placeholder
+        )
+        self.initial_user = initial_user
+        self.confirm = confirm
+        self.focus_on_load = focus_on_load
+
+    def getDict(self):
+        payload = super().getDict()
+        payload["action_id"] = self.action_id
+        if self.placeholder is not None:
+            payload["placeholder"] = self.placeholder.getDict()
+        if self.initial_user is not None:
+            payload["initial_user"] = self.initial_user
+        if self.confirm is not None:
+            payload["confirm"] = self.confirm.getDict()
+        payload["focus_on_load"] = self.focus_on_load
+        return payload
+
+    """
+    not implemented class method
+    """
+    @classmethod
+    def create(cls, params: dict) -> Element:
         pass
-
 
 class ElementSelectWithConversationsList(Element):
     """
@@ -602,12 +631,48 @@ class ElementSelectWithConversationsList(Element):
 
 
 class ElementSelectWithChannelsList(Element):
-    """
-    not implemented
-    """
+    TYPE="channels_select"
 
-    def __init__(self):
-        super().__init__("")
+    def __init__(
+        self,
+        action_id: str,
+        placeholder: Union[ObjectText, str] = None,
+        initial_channel: str = None,
+        confirm: ObjectConfirmationDialog = None,
+        response_url_enabled:bool = False,
+        focus_on_load: bool = False
+    ):
+        super().__init__(self.TYPE)
+        self.action_id = action_id
+        self.placeholder = (
+            ObjectPlainText(placeholder) if type(placeholder) is str else placeholder
+        )
+        self.initial_channel = initial_channel
+        self.confirm = confirm
+        self.response_url_enabled = response_url_enabled
+        self.focus_on_load = focus_on_load
+
+
+    def getDict(self):
+        payload = super().getDict()
+        payload["action_id"] = self.action_id
+        if self.placeholder is not None:
+            payload["placeholder"] = self.placeholder.getDict()
+        if self.initial_channel is not None:
+            payload["initial_channel"] = self.initial_channel
+        if self.confirm is not None:
+            payload["confirm"] = self.confirm.getDict()
+        if self.response_url_enabled:
+            payload["response_url_enabled"] = self.response_url_enabled
+        if self.focus_on_load:
+            payload["focus_on_load"] = self.focus_on_load
+        return payload
+
+    """
+    not implemented class method
+    """
+    @classmethod
+    def create(cls, params: dict) -> Element:
         pass
 
 

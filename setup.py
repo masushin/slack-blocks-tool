@@ -8,7 +8,7 @@ def _requires_from_file(filename):
 
 setuptools.setup(
     name="slackblockstool", # Replace with your own username
-    version="0.2.5",
+    version="0.2.6",
     author="shinsuke masuda",
     author_email="shinsuke.masuda@gmail.com",
     description="Tool for Slack Blocks",
